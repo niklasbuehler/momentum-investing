@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import date
 from termcolor import colored
+import os
 
 def loadData(symbols, start_date, end_date):
     panel_data = data.DataReader(symbols, 'yahoo', start_date, end_date)
@@ -117,6 +118,25 @@ def inspect(stock):
     ax.legend()
     plt.show()
 
+def genPortfolio(stocks):
+    datestr = date.today().strftime("%Y-%m-%d")
+    dir = "export/"+datestr+"/"
+    os.makedirs(dir, exist_ok = True)
+    
+    sma200 = calcSMA(stocks, 200)
+    sma38 = calcSMA(stocks, 38)
+
+    for symbol in stocks.columns:
+        fig, ax = plt.subplots(figsize=(16,9))
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Close")
+        ax.plot(stocks.get(symbol).index, stocks.get(symbol), label=symbol)
+        ax.plot(sma38[symbol].index, sma38[symbol], label=symbol+" SMA38")
+        ax.plot(sma200[symbol].index, sma200[symbol], label=symbol+" SMA200")
+        ax.legend()
+        plt.savefig(dir+symbol+'.png')
+        plt.close(fig)
+
 def help():
     print(colored("=== HELP ===", "green"))
     print(colored("Utility commands:", "green"))
@@ -126,6 +146,7 @@ def help():
     print(colored("> ", "white"), colored("calcSMA(stock, window_size):", "blue"), colored("Calculate the SMA for the given stock data.", "white"))
     print(colored("> ", "white"), colored("plot(values, label_x, label_y):", "blue"), colored("Plot multiple values in a 2d graph.", "white"))
     print(colored("> ", "white"), colored("inspect(stock):", "blue"), colored("Plot the given stocks value as well as its SMA200 and SMA38.", "white"))
+    print(colored("> ", "white"), colored("genPortfolio(stocks):", "blue"), colored("Generate portfolio images for the given stocks in an export folder.", "white"))
     print(colored("> ", "white"), colored("help():", "blue"), colored("Show this help.", "white"))
     print()
     print(colored("Analysis commands:", "green"))
