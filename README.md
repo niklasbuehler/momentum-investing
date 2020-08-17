@@ -5,7 +5,7 @@ A simple python script that implements basic statistical methods to analyze stoc
 The implemented methods are the fundamentals needed to apply momentum investing strategies.
 Two momentum investing strategies are already implemented as well: the simple _Absolute Momentum Strategy_ and the slightly more complex _Momentum Strategy_.
 
-Start the script using `python -i stocks.py`.
+Start the script in interactive mode using `python -i stocks.py`.
 
 This was developed using Python 3.8.5.
 
